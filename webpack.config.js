@@ -18,6 +18,7 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
+    historyApiFallback: true // 解决本地开发browserRouter 404问题
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -32,7 +33,7 @@ const config = {
       {
         test: /\.(ts|tsx)$/i,
         loader: "ts-loader",
-        exclude: ["/node_modules/"],
+        exclude: ["/node_modules/","/dist/"],
       },
       {
         test: /\.less$/i,
