@@ -14,6 +14,8 @@ const config = {
   entry: "./src/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
+    filename: "[name].bundle.js",
+    clean: true // 清空打包目录
   },
   devServer: {
     open: true,
@@ -23,8 +25,7 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "index.html",
-    }),
-
+    })
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
@@ -50,6 +51,11 @@ const config = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
 };
 
