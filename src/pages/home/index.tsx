@@ -1,71 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
+import type { MenuProps } from 'antd'
+import { Layout, Menu, theme } from 'antd'
+import { useLocation } from 'react-router'
+import { Outlet } from 'react-router'
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = Required<MenuProps>['items'][number]
 
 function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[],
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[]
 ): MenuItem {
-    return {
-        label,
-        key,
-        icon,
-        children,
-    } as MenuItem;
+  return {
+    label,
+    key,
+    icon,
+    children,
+  } as MenuItem
 }
 
 const items: MenuItem[] = [
-    getItem('Option 1', '1', <PieChartOutlined />),
-    getItem('Option 2', '2', <DesktopOutlined />),
-    getItem('User', 'sub1', <UserOutlined />, [
-        getItem('Tom', '3'),
-        getItem('Bill', '4'),
-        getItem('Alex', '5'),
-    ]),
-    getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-    getItem('Files', '9', <FileOutlined />),
-];
+  getItem('Option 1', '1', <PieChartOutlined />),
+  getItem('Option 2', '2', <DesktopOutlined />),
+  getItem('User', 'sub1', <UserOutlined />, [
+    getItem('Tom', '3'),
+    getItem('Bill', '4'),
+    getItem('Alex', '5'),
+  ]),
+  getItem('Team', 'sub2', <TeamOutlined />, [
+    getItem('Team 1', '6'),
+    getItem('Team 2', '8'),
+  ]),
+  getItem('Files', '9', <FileOutlined />),
+]
 
 const Home: React.FC = () => {
-    const [collapsed, setCollapsed] = useState(false);
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken();
+  const [collapsed, setCollapsed] = useState(false)
+  const location = useLocation()
 
-    return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-            </Sider>
-            <Layout className="site-layout">
-                <Header style={{ padding: 0, background: colorBgContainer }} />
-                <Content style={{ margin: '0 16px' }}>
-                    <Breadcrumb
-                        style={{ margin: '16px 0' }}
-                        items={[{ title: 'tom' }, { title: "jerry" }]}
-                    />
-                    <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
-                        Bill is a cat.
-                    </div>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
-            </Layout>
-        </Layout>
-    );
-};
+  console.log(location)
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken()
 
-export default Home;
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={['1']}
+          mode="inline"
+          items={items}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          通用头部
+        </Header>
+        <Content style={{ margin: '0 16px' }}>
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
+  )
+}
+
+export default Home

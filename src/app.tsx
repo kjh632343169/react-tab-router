@@ -2,9 +2,7 @@ import RoutesComponent from './routes/config'
 import './app.less'
 
 const App = () => {
-    return <>
-        <RoutesComponent/> 
-    </>
+  return <RoutesComponent />
 }
 
 export default App
