@@ -14,7 +14,7 @@ const config = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
+    publicPath: '/', // 可以解决browserRouter路由资源找不到问题
     filename: '[name].bundle.js',
     clean: true, // 清空打包目录
   },
