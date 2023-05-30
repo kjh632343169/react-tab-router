@@ -47,8 +47,15 @@ const items: MenuItem[] = [
 const Home: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false)
   const location = useLocation()
-
   console.log(location)
+
+  const testFun = () => {
+    return new Promise((resolve, reject) => {
+      resolve(1)
+    })
+  }
+  console.log(testFun)
+
   const {
     token: { colorBgContainer },
   } = theme.useToken()
