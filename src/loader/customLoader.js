@@ -10,11 +10,11 @@ const loader = function (content, map, meta) {
   // 你的 webpack loader 代码
 }
 
-loader.patch = function () {
+module.exports = loader
+
+module.exports.patch = function () {
   console.log('custom loader patch')
 }
-
-module.exports = loader
 
 // module.exports = (content, map, meta) => {
 //   this.callback(null, content, map, meta)

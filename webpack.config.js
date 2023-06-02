@@ -18,6 +18,7 @@ const config = {
     publicPath: '/', // 可以解决browserRouter路由资源找不到问题
     filename: '[name].bundle.js',
     clean: true, // 清空打包目录
+    chunkFilename: '[id].[hash].js',
   },
   devServer: {
     open: true,
@@ -76,6 +77,8 @@ const config = {
       '@': path.join(__dirname, 'src'),
     },
   },
+  // 排除打包库
+  externals: {},
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -88,6 +91,7 @@ module.exports = () => {
     config.mode = 'production'
     config.plugins.push(new MiniCssExtractPlugin())
   } else {
+    config.devtool = 'source-map'
     config.mode = 'development'
   }
   return config
