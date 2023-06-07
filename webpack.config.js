@@ -16,9 +16,9 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/', // 可以解决browserRouter路由资源找不到问题
-    filename: '[name].bundle.js',
+    filename: '[name].[contentHash:8].js',
     clean: true, // 清空打包目录
-    chunkFilename: '[id].[hash].js',
+    chunkFilename: '[id].[chunkHash:8].js',
   },
   devServer: {
     open: true,
@@ -33,8 +33,6 @@ const config = {
       template: 'index.html',
     }),
     new CustomPlugin(),
-    // Add your plugins here
-    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
   module: {
     rules: [
@@ -48,6 +46,8 @@ const config = {
       {
         // less-css文件处理
         test: /\.less$/i,
+        exclude: ['/node_modules/', '/dist/'],
+        include: path.join(__dirname, 'src'),
         use: [
           stylesHandler,
           'css-loader',
@@ -77,16 +77,42 @@ const config = {
       '@': path.join(__dirname, 'src'),
     },
   },
-  // 排除打包库
+  // 排除打包库  一般用于组件库
   externals: {},
+  // 打包提示相关配置
+  performance: {
+    assetFilter: function (assetFilename) {
+      return assetFilename.endsWith('.js')
+    },
+    maxAssetSize: 100000,
+  },
+  //  打包优化相关
   optimization: {
     splitChunks: {
       chunks: 'all',
+      minSize: 20000, // 最小拆分体积
+      enforceSizeThreshold: 40000, // 强制拆分体积阈值
+      minRemainingSize: 0,
+      minChunks: 1,
+      // 缓存组、自定义拆包规则
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'initial',
+          name(module) {
+            const packageName = module.context.match(
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+            )[1]
+            return `${packageName.replace('@', '')}`
+          },
+        },
+      },
     },
   },
 }
 
 module.exports = () => {
+  console.log(isProduction)
   if (isProduction) {
     config.mode = 'production'
     config.plugins.push(new MiniCssExtractPlugin())
